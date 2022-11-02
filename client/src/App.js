@@ -1,25 +1,30 @@
-import logo from './logo.svg';
 import './App.css';
+import RecipeCard from './components/recipe-card';
+import searchResult from './SerchResult';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+  const drinkElements = searchResult.drinks.map(drink => {
+    return (
+    <div key={drink.idDrink}>
+      <RecipeCard name={drink.strDrink} img={drink.strDrinkThumb} id={drink.idDrink}/>
     </div>
-  );
+    )
+  })
+
+  return (
+    <div>
+      {drinkElements}
+    </div>
+  )
+
+  // Alternative way to do it:
+  // return (
+  //   <div className="App">
+  //       {searchResult.drinks.map(drink => <RecipeCard{...drink} />)}
+
+  //       {/* <RecipeCard {...searchResult.drinks}/> */}
+  //   </div>
+  // );
 }
 
 export default App;
