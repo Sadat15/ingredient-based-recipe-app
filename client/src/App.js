@@ -1,19 +1,10 @@
 import './App.css';
-import RecipeCard from './components/recipe-card';
-import searchResult from './SerchResult';
+import RecipeCardGroup from './components/recipe-card-group';
 
 function App() {
-  const drinkElements = searchResult.drinks.map(drink => {
-    return (
-    <div key={drink.idDrink}>
-      <RecipeCard name={drink.strDrink} img={drink.strDrinkThumb} id={drink.idDrink}/>
-    </div>
-    )
-  })
-
   return (
     <div>
-      {drinkElements}
+      <RecipeCardGroup />
     </div>
   )
 
