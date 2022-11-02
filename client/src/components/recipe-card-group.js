@@ -6,13 +6,14 @@ function RecipeCardGroup(drink) {
     <div className="album py-5 bg-light">
       <div className="container">
         <div className="row">
-          {searchResult.drinks.map(drink => {
-            return (
-              <div className="col-md-4" key={drink.idDrink}>
-                <RecipeCard name={drink.strDrink} img={drink.strDrinkThumb} id={drink.idDrink}/>
-              </div>
-            );
-          })}
+          
+            {searchResult.drinks.map(drink => {
+              return (
+                <div className="col-md-3" key={drink.idDrink}>
+                  <RecipeCard name={drink.strDrink} img={drink.strDrinkThumb} id={drink.idDrink}/>
+                </div>
+              );
+            })}
         </div>
       </div>
     </div>
