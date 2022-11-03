@@ -4,7 +4,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import SearchItemButton from "./SearchItemButton";
 
-function SearchBar(props) {
+function SearchBar({ childToParent, idToParent, recipesToParent }) {
   // onClick gets all recipes
   const [searchWord, setSearch] = useState("");
   const [search, setSearchQuery] = useState([]);
@@ -16,7 +16,8 @@ function SearchBar(props) {
       const response = await axios.get(
         `http://localhost:9000/recipes/${parameters}`
       );
-      props.childToParent(parameters);
+      childToParent(parameters);
+      recipesToParent(response.data);
       setRecipes(response.data);
     } else if (searchWord.length > 0) {
       const parameter = searchWord.replace(" ", "_");
@@ -57,9 +58,14 @@ function SearchBar(props) {
         >
           Add
         </button>
-        <button className="search-button btn btn-primary" onClick={getRecipes}>
-          Search
-        </button>
+        <Link to="/recipes">
+          <button
+            className="search-button btn btn-primary"
+            onClick={getRecipes}
+          >
+            Search
+          </button>
+        </Link>
       </div>
       <div className="search-items d-flex justify-content-center">
         <div className="d-flex">
@@ -74,14 +80,6 @@ function SearchBar(props) {
           ))}
         </div>
       </div>
-      {recipes.drinks?.map((recipe) => (
-        <div key={recipe.idDrink}>
-          <h1>
-            <Link to={`/recipe/${recipe.idDrink}`}>{recipe.strDrink}</Link>
-          </h1>
-          <img src={recipe.strDrinkThumb} alt={recipe.strDrink} />
-        </div>
-      ))}
     </div>
   );
 }

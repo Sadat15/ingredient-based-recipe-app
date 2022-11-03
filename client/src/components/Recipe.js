@@ -4,8 +4,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 // import { Link } from "react-router-dom";
 
-function Recipe({ data }) {
-  console.log("Recipe.js");
+function Recipe({ data, id }) {
   const [drink, setRecipe] = useState([]);
   const [content, setContent] = useState([]);
   let searchWords;
@@ -16,13 +15,11 @@ function Recipe({ data }) {
   }, []);
 
   const getRecipe = async () => {
-    const id = window.location.href.split("/").reverse()[0];
     const response = await axios.get(`http://localhost:9000/recipe/${id}`);
     const drink = response.data.drinks[0];
     setRecipe(drink);
 
     let ingredientsArray = [];
-    console.log("searchWords", searchWords);
     for (let i = 1; i <= 15; i++) {
       if (drink[`strIngredient${i}`] !== null) {
         ingredientsArray.push(
@@ -35,16 +32,14 @@ function Recipe({ data }) {
 
   return (
     <div>
-      {console.log(drink)}
-      {console.log(content)}
       <div>
         <img src={drink.strDrinkThumb} alt="Cocktail thumbnail"></img>
       </div>
       <div>
         <h3>{drink.strDrink}</h3>
       </div>
-      {content.map((ingredient) => (
-        <div key={ingredient}>
+      {content.map((ingredient, i) => (
+        <div key={ingredient + i}>
           <li>{ingredient}</li>
         </div>
       ))}
