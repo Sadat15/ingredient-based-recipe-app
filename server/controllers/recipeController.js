@@ -8,16 +8,15 @@ const RecipesController = {
     const url = `https://www.thecocktaildb.com/api/json/v2/${process.env.COCKTAIL_API}/filter.php?i=${drinks}`;
     const response = await fetch(url);
     const data = await response.json();
-    console.log(data);
     res.json(data);
   },
 
   FindByid: async (req, res) => {
     const { id } = req.params;
     const url = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
+    console.log(url);
     const response = await fetch(url);
     const data = await response.json();
-    console.log(data);
     res.json(data);
   }
 };

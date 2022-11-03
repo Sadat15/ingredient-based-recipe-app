@@ -5,8 +5,8 @@ import mockAxios from "jest-mock-axios";
 
 test("SearchBar contains a search bar", () => {
   const { container } = render(<SearchBar />);
-  const inputField = container.getElementsByClassName("input-field");
-  expect(inputField).toHaveLength(1);
+  const inputField = screen.getByRole("textbox", { name: "" });
+  expect(inputField).toBeInTheDocument();
 });
 test("SearchBar contains a add button", () => {
   const { container } = render(<SearchBar />);

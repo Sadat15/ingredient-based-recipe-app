@@ -1,10 +1,10 @@
 import React from "react";
 import { useState } from "react";
 import axios from "axios";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import SearchItemButton from "./SearchItemButton";
 
-function SearchBar() {
+function SearchBar(props) {
   // onClick gets all recipes
   const [searchWord, setSearch] = useState("");
   const [search, setSearchQuery] = useState([]);
@@ -16,6 +16,7 @@ function SearchBar() {
       const response = await axios.get(
         `http://localhost:9000/recipes/${parameters}`
       );
+      props.childToParent(parameters);
       setRecipes(response.data);
     } else if (searchWord.length > 0) {
       const parameter = searchWord.replace(" ", "_");
@@ -74,11 +75,13 @@ function SearchBar() {
         </div>
       </div>
       {recipes.drinks?.map((recipe) => (
-          <div key={recipe.idDrink}>
-            <h1><Link to={`/recipe/${recipe.idDrink}`}>{recipe.strDrink}</Link></h1>
-            <img src={recipe.strDrinkThumb} alt={recipe.strDrink} />
-          </div>
-        ))}
+        <div key={recipe.idDrink}>
+          <h1>
+            <Link to={`/recipe/${recipe.idDrink}`}>{recipe.strDrink}</Link>
+          </h1>
+          <img src={recipe.strDrinkThumb} alt={recipe.strDrink} />
+        </div>
+      ))}
     </div>
   );
 }
