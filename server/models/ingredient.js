@@ -7,8 +7,6 @@ const IngredientSchema = new mongoose.Schema({
   strType: String,
   strAlcohol: String,
   strABV: Number
-  
-
 })
 
 const Ingredient = mongoose.model("Ingredient", IngredientSchema)
