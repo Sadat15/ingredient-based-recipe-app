@@ -1,7 +1,7 @@
 var mongoose = require("mongoose");
-
 require("../mongodb_helper");
 var Ingredient = require("../../models/ingredient");
+
 
 describe("Ingredient model", () => {
   beforeEach((done) => {
