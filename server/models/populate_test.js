@@ -1,7 +1,6 @@
 var mongoose = require("mongoose");
 const Ingredient = require("./ingredient");
 const fetch = require("node-fetch");
-require("dotenv").config();
 const fetchPrice = require('./scraping')
 
 mongoose.connect("mongodb://0.0.0.0/recipe-test", {
@@ -17,7 +16,7 @@ db.once("open", function () {
 });
 
 async function populateDatabase () {
-  for (let i = 23; i <= 23; i++) {
+  for (let i = 50; i <= 55; i++) {
     const url = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?iid=${i}`;
 
     const response = await fetch(url);
@@ -29,7 +28,7 @@ async function populateDatabase () {
 
       const priceList = await fetchPrice(ingredientName)
       
-      if (priceList == []) {
+      if (priceList.length === 0) {
         data.ingredients[0].price = null
         data.ingredients[0].priceQuantity = null
         data.ingredients[0].priceUnit = null

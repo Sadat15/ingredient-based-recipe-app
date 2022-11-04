@@ -27,4 +27,6 @@ const fetchPrice = async (item) => {
 module.exports = fetchPrice;
 
 
-// fetchPrice('rum').then((shelves) => console.log(shelves[0].split(' ')[2]));
+// fetchPrice('rum').then((prices) => console.log(prices[0].split(' ')));
+
+// [0].split(' ')[2])
