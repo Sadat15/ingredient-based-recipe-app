@@ -3,7 +3,7 @@ const Ingredient = require("./ingredient");
 const fetch = require("node-fetch");
 const fetchPrice = require('./scraping')
 
-mongoose.connect("mongodb://0.0.0.0/recipe-test", {
+mongoose.connect("mongodb://0.0.0.0/recipe", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
@@ -16,13 +16,14 @@ db.once("open", function () {
 });
 
 async function populateDatabase () {
-  for (let i = 50; i <= 55; i++) {
+  for (let i = 1; i <= 616; i++) {
     const url = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?iid=${i}`;
 
     const response = await fetch(url);
     const data = await response.json();
 
     if (data.ingredients !== null) {
+      data.ingredients[0].strIngredient = data.ingredients[0].strIngredient.toLowerCase()
       const ingredientName = data.ingredients[0].strIngredient.toLowerCase().split(' ').join('+')
       data.ingredients[0].trolleyLink = `https://www.trolley.co.uk/search/?from=search&q=${ingredientName}`
 
