@@ -6,10 +6,10 @@ const RecipesController = {
   All: async (req, res) => {
     // access drinks parameter
     const { drinks } = req.params;
-    // const url = `https://www.thecocktaildb.com/api/json/v2/${process.env.COCKTAIL_API}/filter.php?i=${drinks}`;
     const drinkArray = drinks.split(",");
     let drinksList;
     let response;
+    // const finalDrinkList = new Set();
     for (i = 0; i < drinkArray.length; i++) {
       let url = `https://www.thecocktaildb.com/api/json/v2/${process.env.COCKTAIL_API}/filter.php?i=${drinkArray[i]}`;
       response = await axios(url);
@@ -19,17 +19,17 @@ const RecipesController = {
         drinksList = drinksList.concat(response.data.drinks);
       }
     }
-    // const finalDrinkList = await drinksList.flat().filter();
+    console.log(drinksList.length);
     const finalDrinkList = [
       ...drinksList
-        .reduce((a, c) => {
-          a.set(c.idDrink, c);
-          return a;
+        .reduce((previousValue, currentValue) => {
+          previousValue.set(currentValue.idDrink, currentValue);
+          return previousValue;
         }, new Map())
         .values(),
     ];
-    console.log(finalDrinkList.length);
-    console.log(drinksList.length);
+
+
     res.json(finalDrinkList);
   },
 
