@@ -6,12 +6,12 @@ const RecipesController = {
   All: async (req, res) => {
     // access drinks parameter
     const { drinks } = req.params;
-    const drinkArray = drinks.split(",");
+    const drinksArray = drinks.split(",");
     let drinksList;
     let response;
-    // const finalDrinkList = new Set();
-    for (i = 0; i < drinkArray.length; i++) {
-      let url = `https://www.thecocktaildb.com/api/json/v2/${process.env.COCKTAIL_API}/filter.php?i=${drinkArray[i]}`;
+    // const responseDrinksList = new Set();
+    for (i = 0; i < drinksArray.length; i++) {
+      let url = `https://www.thecocktaildb.com/api/json/v2/${process.env.COCKTAIL_API}/filter.php?i=${drinksArray[i]}`;
       response = await axios(url);
       if (i === 0) {
         drinksList = await response.data.drinks;
@@ -20,7 +20,7 @@ const RecipesController = {
       }
     }
     console.log(drinksList.length);
-    const finalDrinkList = [
+    const responseDrinksList = [
       ...drinksList
         .reduce((previousValue, currentValue) => {
           previousValue.set(currentValue.idDrink, currentValue);
@@ -29,8 +29,7 @@ const RecipesController = {
         .values(),
     ];
 
-
-    res.json(finalDrinkList);
+    res.json(responseDrinksList);
   },
 
   FindByid: async (req, res) => {
