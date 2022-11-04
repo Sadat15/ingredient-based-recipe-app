@@ -6,9 +6,16 @@ const IngredientSchema = new mongoose.Schema({
   strDescription: String,
   strType: String,
   strAlcohol: String,
-  strABV: Number
+  strABV: Number,
+  trolleyLink: String,
+  price: Number,
+  priceQuantity: String,
+  priceUnit: Number,
+  lastUpdated: Date
 })
 
 const Ingredient = mongoose.model("Ingredient", IngredientSchema)
 
 module.exports = Ingredient;
+
+

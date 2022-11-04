@@ -15,11 +15,13 @@ db.once("open", function () {
   console.log("Connected successfully");
 });
 
-async function createArrayOfIngredients () {
+async function populateDatabase () {
   for (let i = 1; i <= 616; i++) {
     const url = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?iid=${i}`;
     const response = await fetch(url);
     const data = await response.json();
+    data.ingredients[0].tesco_link = `https://www.tesco.com/groceries/en-GB/search?query=${data.ingredients[0].strIngredient}`
+    
 
     if (data.ingredients !== null) {
       const ingredient = new Ingredient(data.ingredients[0])
@@ -31,4 +33,4 @@ async function createArrayOfIngredients () {
   }
 }
 
-createArrayOfIngredients()
+populateDatabase()
