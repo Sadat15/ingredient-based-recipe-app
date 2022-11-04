@@ -1,5 +1,6 @@
 const fetch = require("node-fetch");
 require("dotenv").config();
+const axios = require("axios");
 
 const RecipesController = {
   All: async (req, res) => {
@@ -7,19 +8,21 @@ const RecipesController = {
     const { drinks } = req.params;
     // const url = `https://www.thecocktaildb.com/api/json/v2/${process.env.COCKTAIL_API}/filter.php?i=${drinks}`;
     const drinkArray = drinks.split(",");
-    let data;
+    let drinksList;
     let response;
     for (i = 0; i < drinkArray.length; i++) {
-      const url = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${drinkArray[i]}`;
-      response = await fetch(url);
+      let url = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${drinkArray[i]}`;
+      response = await axios(url);
       if (i === 0) {
-        data = await response.json();
+        drinksList = await response.data.drinks;
+      } else {
+        drinksList = drinksList.concat(response.data.drinks);
       }
-      data.drinks = data.drinks.concat(response.json().drinks);
     }
-    // data.drinks = [...new Set(data.drinks)];
-    console.log(data.drinks);
-    res.json(data);
+    const finalDrinkList = await Array.from([...new Set(drinksList.flat())]);
+    console.log(finalDrinkList.length);
+    console.log(drinksList);
+    res.json(finalDrinkList);
   },
 
   FindByid: async (req, res) => {
