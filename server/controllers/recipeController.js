@@ -11,7 +11,7 @@ const RecipesController = {
     let drinksList;
     let response;
     for (i = 0; i < drinkArray.length; i++) {
-      let url = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${drinkArray[i]}`;
+      let url = `https://www.thecocktaildb.com/api/json/v2/${process.env.COCKTAIL_API}/filter.php?i=${drinkArray[i]}`;
       response = await axios(url);
       if (i === 0) {
         drinksList = await response.data.drinks;
@@ -19,9 +19,17 @@ const RecipesController = {
         drinksList = drinksList.concat(response.data.drinks);
       }
     }
-    const finalDrinkList = await Array.from([...new Set(drinksList.flat())]);
+    // const finalDrinkList = await drinksList.flat().filter();
+    const finalDrinkList = [
+      ...drinksList
+        .reduce((a, c) => {
+          a.set(c.idDrink, c);
+          return a;
+        }, new Map())
+        .values(),
+    ];
     console.log(finalDrinkList.length);
-    console.log(drinksList);
+    console.log(drinksList.length);
     res.json(finalDrinkList);
   },
 
