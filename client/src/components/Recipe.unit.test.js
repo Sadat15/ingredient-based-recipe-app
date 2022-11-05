@@ -87,3 +87,16 @@ test("Recipe contains a cocktail ingredients", async () => {
   const ingredients = await screen.findAllByText(/Tequila/i);
   expect(ingredients).toHaveLength(1);
 });
+test("Recipe contains a cocktail measures", async () => {
+  axios.get.mockResolvedValue({ data: mockData });
+  render(
+    <MemoryRouter>
+      <Recipe match={{ params: { id: "11007" } }} />
+    </MemoryRouter>
+  );
+  // wait for axios.get to resolve
+  await waitFor(() => expect(axios.get).toHaveBeenCalledTimes(1));
+  // wait for measures to load
+  const measures = await screen.findAllByText(/1 1\/2 oz/i);
+  expect(measures).toHaveLength(1);
+});
