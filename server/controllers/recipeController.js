@@ -1,12 +1,12 @@
-const fetch = require("node-fetch");
-const axios = require("axios");
-require("dotenv").config();
+// const fetch = require('node-fetch');
+const axios = require('axios');
+require('dotenv').config();
 
 const RecipesController = {
   All: async (req, res) => {
     // access drinks parameter
     const { drinks } = req.params;
-    const drinksArray = drinks.split(",");
+    const drinksArray = drinks.split(',');
     let drinksList;
     let response;
     // const responseDrinksList = new Set();
@@ -34,10 +34,9 @@ const RecipesController = {
 
   FindByid: async (req, res) => {
     const { id } = req.params;
-    const url = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
-    const response = await fetch(url);
-    const data = await response.json();
-    res.json(data);
+    const url = `https://www.thecocktaildb.com/api/json/v2/${process.env.COCKTAIL_API}/lookup.php?i=${id}`;
+    const response = await axios(url);
+    res.json(response.data);
   },
 };
 
