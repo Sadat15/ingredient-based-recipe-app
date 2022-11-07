@@ -14,7 +14,7 @@ function RecipeCardGroup() {
     <div className="album py-5 background-gradient">
       <div className="container">
         <div className="row d-flex justify-content-center">
-          {recipes?.map((recipe) => (
+          {recipes?.slice(0, 25).map((recipe) => (
             <div className="col-9 col-md-6 col-lg-3" key={recipe.idDrink}>
               <RecipeCard recipe={recipe} search={search} />
             </div>

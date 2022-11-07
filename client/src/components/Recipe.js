@@ -33,8 +33,8 @@ function Recipe() {
 
   return (
     <div>
-      {console.log(drink)}
-      {console.log(content)}
+      {/* {console.log(drink)}
+      {console.log(content)} */}
       <div><img src={drink.strDrinkThumb} alt="Cocktail thumbnail"></img></div>
       <div><h3>{drink.strDrink}</h3></div>
       {content.map((ingredient) => (

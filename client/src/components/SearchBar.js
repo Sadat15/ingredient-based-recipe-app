@@ -1,14 +1,14 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import axios from "axios";
-import SearchItemButton from "./SearchItemButton";
-import BackgroundImage from "../img/sb1.png";
-import { Outlet, Link } from "react-router-dom";
-import Navbar from "./NavBar";
+import React from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import SearchItemButton from './SearchItemButton';
+import BackgroundImage from '../img/sb1.png';
+import { Outlet, Link } from 'react-router-dom';
+import Navbar from './NavBar';
 
 function SearchBar() {
   // onClick gets all recipes
-  const [searchWord, setSearch] = useState("");
+  const [searchWord, setSearch] = useState('');
   const [search, setSearchQuery] = useState([]);
   const [recipes, setRecipes] = useState([]);
   const [ingredients, setIngredients] = useState([]);
@@ -16,18 +16,19 @@ function SearchBar() {
 
   useEffect(() => {
     const loadAllIngredients = async () => {
-      const response = await axios.get(
-        `http://localhost:9000/ingredient/returnAllIngredients`
-      );
-      setIngredients(response.data);
+      if (ingredients.length === 0) {
+        const response = await axios.get(
+          `http://localhost:9000/ingredient/returnAllIngredients`
+        );
+        setIngredients(response.data);
+      }
     };
     loadAllIngredients();
-    console.log(ingredients);
   }, []);
 
   const getRecipes = async () => {
     if (search.length > 0) {
-      const parameters = search.map((word) => word.replace(" ", "_"));
+      const parameters = search.map((word) => word.replace(' ', '_'));
       const response = await axios.get(
         `http://localhost:9000/recipes/${parameters}`
       );
@@ -35,7 +36,7 @@ function SearchBar() {
         setRecipes(response.data);
       }
     } else if (searchWord.length > 0) {
-      const parameter = searchWord.replace(" ", "_");
+      const parameter = searchWord.replace(' ', '_');
       const response = await axios.get(
         `http://localhost:9000/recipes/${parameter}`
       );
@@ -52,7 +53,7 @@ function SearchBar() {
 
   const addSearchWord = () => {
     // clear search bar with document query selector
-    document.querySelector(".input-field").value = "";
+    document.querySelector('.input-field').value = '';
     // add the search word to the search array if it's not there yet
     if (!search.includes(searchWord)) {
       const updatedSearch = search.push(searchWord);
@@ -62,14 +63,14 @@ function SearchBar() {
 
   const searchBackground = {
     background: `url(${BackgroundImage}) no-repeat center center/cover`,
-    height: "270px",
+    height: '270px',
   };
 
   const suggestIngredients = (text) => {
     let matches = [];
     if (text.length > 0) {
       matches = ingredients.filter((ingredient) => {
-        const regex = new RegExp("^" + text, "gi");
+        const regex = new RegExp('^' + text, 'gi');
         return ingredient.strIngredient.match(regex);
       });
       // sort by popularity
@@ -109,7 +110,7 @@ function SearchBar() {
             <div className="col-1 m-2">
               <button
                 className="add-button btn btn-primary"
-                style={{ backgroundColor: "#20577b", borderColor: "#20577b" }}
+                style={{ backgroundColor: '#20577b', borderColor: '#20577b' }}
                 onClick={addSearchWord}
               >
                 Add
@@ -120,8 +121,8 @@ function SearchBar() {
                 <button
                   className="search-button btn btn-primary"
                   style={{
-                    backgroundColor: "#20577b",
-                    borderColor: "#20577b",
+                    backgroundColor: '#20577b',
+                    borderColor: '#20577b',
                   }}
                   onClick={getRecipes}
                 >
@@ -137,8 +138,8 @@ function SearchBar() {
                   <button
                     className="search-item-button add-button m-2 btn btn-primary"
                     style={{
-                      backgroundColor: "#25aec9",
-                      borderColor: "#25aec9",
+                      backgroundColor: '#25aec9',
+                      borderColor: '#25aec9',
                     }}
                     onClick={() => {
                       addFromSuggestion(suggestion.strIngredient);
