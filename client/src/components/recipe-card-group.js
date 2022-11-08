@@ -1,10 +1,16 @@
 import RecipeCard from "./recipe-card";
 import { useOutletContext } from "react-router-dom";
+import { useEffect } from "react";
 // import searchResult from './SearchResult';
 
 function RecipeCardGroup() {
   const { recipes, setRecipes } = useOutletContext();
   const { search, setSearchQuery } = useOutletContext();
+
+  useEffect(() => {
+    setRecipes(recipes);
+    setSearchQuery(search);
+  }, [recipes, setRecipes, search, setSearchQuery]);
 
   const background = {
     background: "#86b0b3",

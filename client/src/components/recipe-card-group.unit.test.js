@@ -1,81 +1,47 @@
 // mock recipe-card-group.js
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import React from "react";
+import { act } from "react-dom/test-utils";
 import RecipeCardGroup from "./recipe-card-group";
 import { MemoryRouter } from "react-router-dom";
-import RecipeCard from "./recipe-card";
-import { useOutletContext } from "react-router-dom";
-import axios from "axios";
+import { mockDrinksApi, mockSearchArray } from "../__mocks__/mockData";
 
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useOutletContext: () => ({
-    recipes: [
-      {
-        idDrink: "11007",
-        strDrink: "Margarita",
-        drinkThumb:
-          "https://www.thecocktaildb.com/images/media/drink/3pylqc1504816928.jpg",
-      },
-      {
-        idDrink: "11008",
-        strDrink: "Vodka Martini",
-        drinkThumb:
-          "https://www.thecocktaildb.com/images/media/drink/3pylqc1504816928.jpg",
-      },
-    ],
+    recipes: mockDrinksApi,
     setRecipes: jest.fn(),
-    search: ["test"],
+    search: mockSearchArray,
     setSearchQuery: jest.fn(),
   }),
 }));
 
 jest.mock("axios");
 
+const mockChildComponent = jest.fn();
+jest.mock("./recipe-card", () => (props) => {
+  mockChildComponent(props);
+  return <mock-childComponent />;
+});
+
 test("RecipeCardGroup renders correctly", () => {
   // mock the axios call to return a list of ingredients
-  axios.get.mockResolvedValueOnce({
-    data: {
-      drinks: [
-        {
-          idDrink: "11007",
-          strDrink: "Margarita",
-          strDrinkAlternate: null,
-          strTags: "IBA,ContemporaryClassic",
-          strVideo: null,
-          strCategory: "Ordinary Drink",
-          strIBA: "Contemporary Classics",
-          strAlcoholic: "Alcoholic",
-          strGlass: "Cocktail glass",
-          strInstructions: "test instructions",
-          strIngredient1: "test ingredient 1",
-          strIngredient2: "test ingredient 2",
-          strIngredient3: "test ingredient 3",
-        },
-        {
-          idDrink: "11008",
-          strDrink: "Vodka Martini",
-          strDrinkAlternate: null,
-          strTags: "IBA,ContemporaryClassic",
-          strVideo: null,
-          strCategory: "Ordinary Drink",
-          strIBA: "Contemporary Classics",
-          strAlcoholic: "Alcoholic",
-          strGlass: "Cocktail glass",
-          strInstructions: "test instructions",
-          strIngredient1: "test ingredient 1",
-          strIngredient2: "test ingredient 2",
-          strIngredient3: "test ingredient 3",
-        },
-      ],
-    },
+  act(() => {
+    render(
+      <MemoryRouter>
+        <RecipeCardGroup />
+      </MemoryRouter>
+    );
   });
-  render(
-    <MemoryRouter>
-      <RecipeCardGroup />
-    </MemoryRouter>
+  // check that the recipe card group renders 3 cards
+  expect(mockChildComponent).toHaveBeenCalledWith(
+    expect.objectContaining({
+      recipe: mockDrinksApi[0],
+    })
   );
-  // check that the recipe card renders
-  expect(screen.getByText("Margarita")).toBeInTheDocument();
-  expect(screen.getByText("Vodka Martini")).toBeInTheDocument();
-  // expect(screen.getByText("3 ingredients missing")).toBeInTheDocument();
+  expect(mockChildComponent).toHaveBeenCalledWith(
+    expect.objectContaining({
+      recipe: mockDrinksApi[1],
+    })
+  );
 });

@@ -10,11 +10,10 @@ function RecipeCard({ recipe, search }) {
     const response = await axios.get(
       `http://localhost:9000/recipe/${recipe.idDrink}`
     );
-    console.log("🚀 ~ file: recipe-card.js ~ line 13 ~ countMissing ~ const", const)
     const drink = response.data.drinks[0];
     for (let i = 1; i < 16; i++) {
       const ingredientExists = new RegExp(
-        "^" + `${drink[`strIngredient${i}`] + "$"}`,
+        `^${drink[`strIngredient${i}`]}$`,
         "i"
       );
       if (drink[`strIngredient${i}`] !== null) {
@@ -23,12 +22,12 @@ function RecipeCard({ recipe, search }) {
         }
       }
     }
-    await setMissing(count);
+    setMissing(count);
   };
 
   useEffect(() => {
     countMissing(recipe);
-  }, []);
+  });
 
   return (
     <div className="card mb-4 grow" key={recipe.idDrink}>
