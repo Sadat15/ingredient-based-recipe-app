@@ -12,7 +12,7 @@ function SearchItemButton(props) {
         textAlign: "center",
       }}
     >
-      {props.item}
+      {props.item} x
     </button>
   );
 }

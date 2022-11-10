@@ -29,7 +29,7 @@ test("SearchBar renders correctly", async () => {
 
   await waitFor(() => {
     expect(
-      screen.getByPlaceholderText("Search for a recipe")
+      screen.getByPlaceholderText("Search for ingredients")
     ).toBeInTheDocument();
   });
 
@@ -37,16 +37,12 @@ test("SearchBar renders correctly", async () => {
     expect(screen.getByText("Search")).toBeInTheDocument();
   });
 
-  await waitFor(() => {
-    expect(screen.getByText("Add")).toBeInTheDocument();
-  });
-
   // type in the search bar
-  userEvent.type(screen.getByPlaceholderText("Search for a recipe"), "vod");
+  userEvent.type(screen.getByPlaceholderText("Search for ingredients"), "vod");
 
   // check that the search bar is updated
   await waitFor(() => {
-    expect(screen.getByPlaceholderText("Search for a recipe")).toHaveValue(
+    expect(screen.getByPlaceholderText("Search for ingredients")).toHaveValue(
       "vod"
     );
   });

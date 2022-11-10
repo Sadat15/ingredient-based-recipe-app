@@ -20,7 +20,6 @@ function Recipe() {
         const drinkPriceResponse = await getIngredientFromDb(
           drink[`strIngredient${i}`]
         );
-        console.log(drinkPriceResponse.data);
         ingredientsArray.push([
           drink[`strIngredient${i}`],
           drink[`strMeasure${i}`],
@@ -42,41 +41,64 @@ function Recipe() {
     const response = await axios.get(
       `http://localhost:9000/ingredient/${item}`
     );
-    console.log(response);
     return response;
   };
 
   return (
-    <div>
-      <div>
-        <img src={drink.strDrinkThumb} alt="Cocktail thumbnail"></img>
-      </div>
-      <div>
-        <h3>{drink.strDrink}</h3>
-      </div>
-      {content.map((ingredient) => (
-        <div key={ingredient}>
-          <li>
-            <button
-              className="btn btn-outline-primary"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#ingredientInfo"
-              aria-expanded="false"
-              aria-controls="collapseExample"
-            >
-              {ingredient[0]}
-            </button>{" "}
-            {ingredient[1]}{" "}
-            <a href={`${ingredient[3]}`}>buy for £{ingredient[2]}</a>
-            <div className="collapse" id="ingredientInfo">
-              <div className="card card-body">{ingredient[4]}</div>
+    <div className="background-gradient">
+      <div className="container">
+        <div className="row pt-4">
+          <div className="col"></div>
+          <div className="col-11">
+            <div className="card mb-3">
+              <div className="row g-0">
+                <div className="col-md-4">
+                  <img
+                    src={drink.strDrinkThumb}
+                    className="img-fluid rounded-start"
+                    alt="..."
+                  ></img>
+                </div>
+                <div className="col-md-8">
+                  <div className="card-body">
+                    <h5 className="card-title">{drink.strDrink}</h5>
+                    <div className="card-text">
+                      {content.map((ingredient) => (
+                        <div key={ingredient}>
+                          <li>
+                            <button
+                              className="btn btn-outline-primary"
+                              type="button"
+                              data-bs-toggle="collapse"
+                              data-bs-target="#ingredientInfo"
+                              aria-expanded="false"
+                              aria-controls="collapseExample"
+                            >
+                              {ingredient[0]}
+                            </button>{" "}
+                            {ingredient[1]}{" "}
+                            <a href={`${ingredient[3]}`}>
+                              buy for £{ingredient[2]}
+                            </a>
+                            <div className="collapse" id="ingredientInfo">
+                              <div className="card card-body">
+                                {ingredient[4]}
+                              </div>
+                            </div>
+                            {/* {ingredient[0]} {ingredient[1]} <a href={`${ingredient[3]}`}>buy for £{ingredient[2]}</a> */}
+                          </li>
+                        </div>
+                      ))}
+                    </div>
+                    <div>{drink.strInstructions}</div>
+                  </div>
+                </div>
+              </div>
             </div>
-            {/* {ingredient[0]} {ingredient[1]} <a href={`${ingredient[3]}`}>buy for £{ingredient[2]}</a> */}
-          </li>
+          </div>
+          <div className="col"></div>
         </div>
-      ))}
-      <div>{drink.strInstructions}</div>
+      </div>
     </div>
   );
 }

@@ -2,7 +2,6 @@ import RecipeCard from "./recipe-card";
 import { useOutletContext } from "react-router-dom";
 import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-// import searchResult from './SearchResult';
 
 function RecipeCardGroup() {
   const { recipes, setRecipes } = useOutletContext();
@@ -14,7 +13,6 @@ function RecipeCardGroup() {
   useEffect(() => {
     setRecipes(recipes);
     setSearchQuery(search);
-    // fetchData(setItems);
   }, [recipes, setRecipes, search, setSearchQuery]);
 
   const showItems = (posts) => {
@@ -48,7 +46,6 @@ function RecipeCardGroup() {
       }, 2000);
     }
   };
-
   return (
     <div className="album py-5 background-gradient">
       <InfiniteScroll

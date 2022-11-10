@@ -6,12 +6,14 @@ const mockDrinksApi = [
     strDrink: "Margarita",
     drinkThumb:
       "https://www.thecocktaildb.com/images/media/drink/3pylqc1504816928.jpg",
+    missingIngredients: 3,
   },
   {
     idDrink: "11008",
     strDrink: "Vodka Martini",
     drinkThumb:
       "https://www.thecocktaildb.com/images/media/drink/3pylqc1504816928.jpg",
+    missingIngredients: 3,
   },
 ];
 

@@ -6,7 +6,6 @@ import BackgroundImage from "../img/sb1.png";
 import "./SearchBar.css";
 import { Outlet, Link } from "react-router-dom";
 import Navbar from "./NavBar";
-// import "./SearchBar.css";
 
 function SearchBar() {
   // onClick gets all recipes
@@ -32,9 +31,7 @@ function SearchBar() {
         const typedSearchWord = document.querySelector(".input-field").value;
 
         if (!search.includes(typedSearchWord) && typedSearchWord.length > 0) {
-          console.log("hey1");
           const updatedSearch = search.push(typedSearchWord);
-          console.log("updated search" + updatedSearch);
           setSearch(updatedSearch);
         }
         getRecipes();
@@ -44,24 +41,40 @@ function SearchBar() {
   }, []);
 
   const getRecipes = async () => {
-    console.log("function");
-    console.log(searchWord);
     if (search.length > 0) {
       const parameters = search.map((word) => word.replace(" ", "_"));
       const response = await axios.get(
-        `http://localhost:9000/recipes/${parameters}`
+        `http://localhost:9000/cocktail/getall/${parameters}`
       );
       if (response.data !== null) {
-        setRecipes(response.data);
+        updateIngredients(response.data);
+        const sortedArrayOfRecipes = response.data.sort((a, b) => {
+          if (a.numberOfOverlapping === b.numberOfOverlapping) {
+            return a.missingIngredients - b.missingIngredients;
+          }
+          return b.numberOfOverlapping - a.numberOfOverlapping;
+        });
+
+        const sortedUniqueRecipes = sortedArrayOfRecipes.filter(
+          (value, index, self) =>
+            index === self.findIndex((t) => t.idDrink === value.idDrink)
+        );
+        setRecipes(sortedUniqueRecipes);
       }
     } else if (searchWord.length > 0) {
+      const updatedSearch = search.push(searchWord);
+      setSearch(updatedSearch);
+
       const parameter = searchWord.replace(" ", "_");
       const response = await axios.get(
-        `http://localhost:9000/recipes/${parameter}`
+        `http://localhost:9000/cocktail/getall/${parameter}`
       );
-      if (response.data !== null) {
-        setRecipes(response.data);
-      }
+      updateIngredients(response.data);
+      // we don't need to sort here since we are only searching for one ingredient
+      // response.data.sort((a, b) => {
+      //   return a.numberOfOverlapping - b.numberOfOverlapping
+      // })
+      setRecipes(response.data);
     }
     setSuggestions([]);
   };
@@ -113,13 +126,46 @@ function SearchBar() {
     document.querySelector(".input-field").value = "";
   };
 
+  const updateIngredients = (data) => {
+    for (let i = 0; i < data.length; i++) {
+      const recipeIngredients = [];
+      for (let j = 1; j <= 15; j++) {
+        if (data[i][`strIngredient${j}`] !== null) {
+          recipeIngredients.push(data[i][`strIngredient${j}`]);
+        }
+      }
+
+      const recipeIngredientsLower = recipeIngredients.map((element) =>
+        element.toLowerCase()
+      );
+
+      let searchLower = search.map((element) => element.toLowerCase());
+
+      var allUniqueIngredients = recipeIngredientsLower.concat(
+        searchLower.filter((item) => recipeIngredientsLower.indexOf(item) < 0)
+      );
+
+      const numberOfOverlapping =
+        searchLower.length +
+        recipeIngredientsLower.length -
+        allUniqueIngredients.length;
+
+      const missingIngredients =
+        allUniqueIngredients.length - searchLower.length;
+
+      data[i].ingredientsArray = recipeIngredients;
+      data[i].numberOfOverlapping = numberOfOverlapping;
+      data[i].missingIngredients = missingIngredients;
+    }
+  };
+
   return (
     <>
       <div className="search-bar">
         <Navbar />
         <div className="background" style={searchBackground}>
           <div className="container">
-            <div className="row" style={{ minHeight: "80px" }}>
+            <div className="row pt-3" style={{ minHeight: "80px" }}>
               {search?.map((item) => (
                 <div
                   className="col-1"
