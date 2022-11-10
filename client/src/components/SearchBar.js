@@ -3,9 +3,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import SearchItemButton from "./SearchItemButton";
 import BackgroundImage from "../img/sb1.png";
+import "./SearchBar.css";
 import { Outlet, Link } from "react-router-dom";
 import Navbar from "./NavBar";
-// import "./SearchBar.css";
 
 function SearchBar() {
   // onClick gets all recipes
@@ -31,7 +31,6 @@ function SearchBar() {
         const typedSearchWord = document.querySelector(".input-field").value;
 
         if (!search.includes(typedSearchWord) && typedSearchWord.length > 0) {
-
           const updatedSearch = search.push(typedSearchWord);
           setSearch(updatedSearch);
         }
@@ -48,19 +47,18 @@ function SearchBar() {
         `http://localhost:9000/cocktail/getall/${parameters}`
       );
       if (response.data !== null) {
-        updateIngredients(response.data)
+        updateIngredients(response.data);
         const sortedArrayOfRecipes = response.data.sort((a, b) => {
           if (a.numberOfOverlapping === b.numberOfOverlapping) {
-            return a.missingIngredients - b.missingIngredients
+            return a.missingIngredients - b.missingIngredients;
           }
-          return b.numberOfOverlapping - a.numberOfOverlapping
-        })
+          return b.numberOfOverlapping - a.numberOfOverlapping;
+        });
 
-        const sortedUniqueRecipes = sortedArrayOfRecipes.filter((value, index, self) => (
-          index === self.findIndex((t) => (
-            t.idDrink === value.idDrink
-          ))
-        ));
+        const sortedUniqueRecipes = sortedArrayOfRecipes.filter(
+          (value, index, self) =>
+            index === self.findIndex((t) => t.idDrink === value.idDrink)
+        );
         setRecipes(sortedUniqueRecipes);
       }
     } else if (searchWord.length > 0) {
@@ -71,15 +69,15 @@ function SearchBar() {
       const response = await axios.get(
         `http://localhost:9000/cocktail/getall/${parameter}`
       );
-      updateIngredients(response.data)
+      updateIngredients(response.data);
       // we don't need to sort here since we are only searching for one ingredient
       // response.data.sort((a, b) => {
       //   return a.numberOfOverlapping - b.numberOfOverlapping
       // })
       setRecipes(response.data);
     }
-  }
-    
+    setSuggestions([]);
+  };
 
   const removeSearchItem = (item) => {
     const newSearch = search.filter((word) => word !== item);
@@ -94,11 +92,12 @@ function SearchBar() {
       const updatedSearch = search.push(searchWord);
       setSearch(updatedSearch);
     }
+    setSuggestions([]);
   };
 
   const searchBackground = {
     background: `url(${BackgroundImage}) no-repeat center center/cover`,
-    height: "auto",
+    height: "250px",
   };
 
   const suggestIngredients = (text) => {
@@ -123,108 +122,93 @@ function SearchBar() {
       const updatedSearch = search.push(item);
       setSearch(updatedSearch);
     }
+    setSuggestions([]);
     document.querySelector(".input-field").value = "";
   };
 
   const updateIngredients = (data) => {
     for (let i = 0; i < data.length; i++) {
-      const recipeIngredients = []
-      for (let j=1; j<= 15; j++) {
+      const recipeIngredients = [];
+      for (let j = 1; j <= 15; j++) {
         if (data[i][`strIngredient${j}`] !== null) {
-          recipeIngredients.push(data[i][`strIngredient${j}`])
+          recipeIngredients.push(data[i][`strIngredient${j}`]);
         }
       }
 
-      const recipeIngredientsLower = recipeIngredients.map(element => element.toLowerCase())
+      const recipeIngredientsLower = recipeIngredients.map((element) =>
+        element.toLowerCase()
+      );
 
-      let searchLower = search.map(element => element.toLowerCase())
+      let searchLower = search.map((element) => element.toLowerCase());
 
-      var allUniqueIngredients = recipeIngredientsLower.concat(searchLower.filter((item) => recipeIngredientsLower.indexOf(item) < 0));
+      var allUniqueIngredients = recipeIngredientsLower.concat(
+        searchLower.filter((item) => recipeIngredientsLower.indexOf(item) < 0)
+      );
 
-      const numberOfOverlapping = searchLower.length + recipeIngredientsLower.length - allUniqueIngredients.length
+      const numberOfOverlapping =
+        searchLower.length +
+        recipeIngredientsLower.length -
+        allUniqueIngredients.length;
 
-      const missingIngredients = allUniqueIngredients.length - searchLower.length
-      
-      data[i].ingredientsArray = recipeIngredients
-      data[i].numberOfOverlapping = numberOfOverlapping
-      data[i].missingIngredients = missingIngredients
-      
+      const missingIngredients =
+        allUniqueIngredients.length - searchLower.length;
+
+      data[i].ingredientsArray = recipeIngredients;
+      data[i].numberOfOverlapping = numberOfOverlapping;
+      data[i].missingIngredients = missingIngredients;
     }
-  }
-
+  };
 
   return (
     <>
-      <div
-        className="search-bar d-flex search-background"
-        style={searchBackground}
-      >
-        <div className="container">
-          <Navbar />
-          <div className="row centre-search">
-            <div className="col-md-8 p-2">
-              <input
-                className="input-field form-control inputbox-transparent"
-                id="search-box"
-                type="text"
-                placeholder="Search for a recipe"
-                onChange={(e) => suggestIngredients(e.target.value)}
-              />
-            </div>
-            <div className="col-1 m-2 text-center">
-              <button
-                className="add-button btn btn-primary"
-                style={{ backgroundColor: "#20577b", borderColor: "#20577b" }}
-                onClick={addSearchWord}
-              >
-                Add
-              </button>
-            </div>
-            <div className="col-1 m-2">
-              <Link to="/recipes">
-                <button
-                  className="search-button btn btn-primary text-center"
-                  id="search-button"
-                  style={{
-                    backgroundColor: "#20577b",
-                    borderColor: "#20577b",
-                  }}
-                  onClick={getRecipes}
+      <div className="search-bar">
+        <Navbar />
+        <div className="background" style={searchBackground}>
+          <div className="container">
+            <div className="row pt-3" style={{ minHeight: "80px" }}>
+              {search?.map((item) => (
+                <div
+                  className="col-1"
+                  key={item}
+                  onClick={() => removeSearchItem(item)}
                 >
-                  Search
-                </button>
-              </Link>
+                  <SearchItemButton item={item} />
+                </div>
+              ))}
             </div>
           </div>
-          <div className="m-2">
-            <div className="row row-cols-auto d-flex justify-content-around">
-              <div className="col-6 text-center">
-                {suggestions.map((suggestion, i) => (
-                  <button
-                    className="search-item-button add-button m-2 btn btn-primary"
-                    style={{
-                      backgroundColor: "#25aec9",
-                      borderColor: "#25aec9",
-                    }}
-                    onClick={() => {
-                      addFromSuggestion(suggestion.strIngredient);
-                    }}
-                    key={`suggestion${i}`}
-                  >
-                    {suggestion.strIngredient}
-                  </button>
-                ))}
+          <div className="container">
+            <div className="row">
+              <div className="dropdown col-8 px-3">
+                <div id="myDropdown" className="dropdown-content pull-right">
+                  <input
+                    type="text"
+                    className="form-control input-field"
+                    placeholder="Search for ingredients"
+                    id="search-box"
+                    onChange={(e) => suggestIngredients(e.target.value)}
+                  />
+                  {suggestions.map((item, i) => (
+                    <a
+                      key={item + i}
+                      href="#"
+                      onClick={() => addFromSuggestion(item.strIngredient)}
+                    >
+                      {item.strIngredient}
+                    </a>
+                  ))}
+                </div>
               </div>
-              <div className="added col-6">
-                {search?.map((item) => (
-                  <div
-                    className="d-inline"
-                    key={item}
-                    onClick={() => removeSearchItem(item)}
+              <div className="col-4">
+                <Link to="/recipes">
+                  <button
+                    className="btn btn-primary float-start"
+                    id="search-button"
+                    onClick={getRecipes}
                   >
-                    <SearchItemButton item={item} />
-                  </div>
-                ))}
+                    Search
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -236,17 +220,3 @@ function SearchBar() {
 }
 
 export default SearchBar;
-
-// Sorting strategy
-
-// [1,2,3] - search
-
-// [2,5,8,9,3] - recipe 1 - overlap is [2, 3] - length is 2, missing ingredients ingredients.length - overlap.length (3)
-
-// [2,6,7] - recipe 2 - overlap is [2] - length is 1, missing ingredients ingredients.length - overlap.length (2)
-
-// [1,2,3,4,7,9] - recipe 3 - overlap is [1,2,3] - length is 3, missing ingredients ingredients.length - overlap.length (3)
-
-// [2,5,8,3] - recipe 4 - overlap is [2, 3] - length is 2, missing ingredients ingredients.length - overlap.length (2)
-
-// sorting: 3, 4, 1, 2
