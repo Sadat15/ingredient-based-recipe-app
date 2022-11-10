@@ -3,8 +3,10 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import SearchItemButton from "./SearchItemButton";
 import BackgroundImage from "../img/sb1.png";
+import "./SearchBar.css";
 import { Outlet, Link } from "react-router-dom";
 import Navbar from "./NavBar";
+// import "./SearchBar.css";
 
 function SearchBar() {
   // onClick gets all recipes
@@ -22,9 +24,28 @@ function SearchBar() {
       setIngredients(response.data);
     };
     loadAllIngredients();
+
+    const el = document.getElementById("search-box");
+
+    el.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        const typedSearchWord = document.querySelector(".input-field").value;
+
+        if (!search.includes(typedSearchWord) && typedSearchWord.length > 0) {
+          console.log("hey1");
+          const updatedSearch = search.push(typedSearchWord);
+          console.log("updated search" + updatedSearch);
+          setSearch(updatedSearch);
+        }
+        getRecipes();
+        document.querySelector(".input-field").value = "";
+      }
+    });
   }, []);
 
   const getRecipes = async () => {
+    console.log("function");
+    console.log(searchWord);
     if (search.length > 0) {
       const parameters = search.map((word) => word.replace(" ", "_"));
       const response = await axios.get(
@@ -42,6 +63,7 @@ function SearchBar() {
         setRecipes(response.data);
       }
     }
+    setSuggestions([]);
   };
 
   const removeSearchItem = (item) => {
@@ -57,11 +79,12 @@ function SearchBar() {
       const updatedSearch = search.push(searchWord);
       setSearch(updatedSearch);
     }
+    setSuggestions([]);
   };
 
   const searchBackground = {
     background: `url(${BackgroundImage}) no-repeat center center/cover`,
-    height: "270px",
+    height: "250px",
   };
 
   const suggestIngredients = (text) => {
@@ -86,78 +109,60 @@ function SearchBar() {
       const updatedSearch = search.push(item);
       setSearch(updatedSearch);
     }
+    setSuggestions([]);
+    document.querySelector(".input-field").value = "";
   };
 
   return (
     <>
-      <div
-        className="search-bar d-flex search-background"
-        style={searchBackground}
-      >
-        <div className="container">
-          <Navbar />
-          <div className="row centre-search">
-            <div className="col-md-8 p-2">
-              <input
-                className="input-field form-control inputbox-transparent"
-                type="text"
-                placeholder="Search for a recipe"
-                onChange={(e) => suggestIngredients(e.target.value)}
-              />
-            </div>
-            <div className="col-1 m-2">
-              <button
-                className="add-button btn btn-primary"
-                style={{ backgroundColor: "#20577b", borderColor: "#20577b" }}
-                onClick={addSearchWord}
-              >
-                Add
-              </button>
-            </div>
-            <div className="col-1 m-2">
-              <Link to="/recipes">
-                <button
-                  className="search-button btn btn-primary"
-                  style={{
-                    backgroundColor: "#20577b",
-                    borderColor: "#20577b",
-                  }}
-                  onClick={getRecipes}
+      <div className="search-bar">
+        <Navbar />
+        <div className="background" style={searchBackground}>
+          <div className="container">
+            <div className="row" style={{ minHeight: "80px" }}>
+              {search?.map((item) => (
+                <div
+                  className="col-1"
+                  key={item}
+                  onClick={() => removeSearchItem(item)}
                 >
-                  Search
-                </button>
-              </Link>
+                  <SearchItemButton item={item} />
+                </div>
+              ))}
             </div>
           </div>
-          <div className="m-2">
-            <div className="row d-flex justify-content-around">
-              <div className="col-6">
-                {suggestions.map((suggestion, i) => (
-                  <button
-                    className="search-item-button add-button m-2 btn btn-primary"
-                    style={{
-                      backgroundColor: "#25aec9",
-                      borderColor: "#25aec9",
-                    }}
-                    onClick={() => {
-                      addFromSuggestion(suggestion.strIngredient);
-                    }}
-                    key={`suggestion${i}`}
-                  >
-                    {suggestion.strIngredient}
-                  </button>
-                ))}
+          <div className="container">
+            <div className="row">
+              <div className="dropdown col-8 px-3">
+                <div id="myDropdown" className="dropdown-content pull-right">
+                  <input
+                    type="text"
+                    className="form-control input-field"
+                    placeholder="Search for ingredients"
+                    id="search-box"
+                    onChange={(e) => suggestIngredients(e.target.value)}
+                  />
+                  {suggestions.map((item, i) => (
+                    <a
+                      key={item + i}
+                      href="#"
+                      onClick={() => addFromSuggestion(item.strIngredient)}
+                    >
+                      {item.strIngredient}
+                    </a>
+                  ))}
+                </div>
               </div>
-              <div className="col-6">
-                {search?.map((item) => (
-                  <div
-                    className="d-inline"
-                    key={item}
-                    onClick={() => removeSearchItem(item)}
+              <div className="col-4">
+                <Link to="/recipes">
+                  <button
+                    className="btn btn-primary float-start"
+                    id="search-button"
+                    onClick={getRecipes}
                   >
-                    <SearchItemButton item={item} />
-                  </div>
-                ))}
+                    Search
+                  </button>
+                </Link>
               </div>
             </div>
           </div>

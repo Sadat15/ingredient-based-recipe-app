@@ -23,7 +23,11 @@ function RecipeCardGroup() {
       for (var i = 0; i < records; i++) {
         if (recipes[i]) {
           items.push(
-            <div className="col-9 col-md-6 col-lg-3" key={posts[i].idDrink}>
+            <div
+              className="col-9 col-md-6 col-lg-3"
+              id={`${posts.idDrink}`}
+              key={posts[i].idDrink}
+            >
               <RecipeCard recipe={posts[i]} search={search} />
             </div>
           );
@@ -46,17 +50,19 @@ function RecipeCardGroup() {
   };
 
   return (
-    <div className="album py-5 background-gradient" id="scrollableDiv">
-      <div className="container">
-        <InfiniteScroll
-          dataLength={records}
-          next={loadMore}
-          hasMore={hasMore}
-          loader={<h4>Loading...</h4>}
-        >
-          <div className="row">{showItems(recipes)}</div>
-        </InfiniteScroll>
-      </div>
+    <div className="album py-5 background-gradient">
+      <InfiniteScroll
+        dataLength={records}
+        next={loadMore}
+        hasMore={hasMore}
+        loader={<h4>Loading...</h4>}
+      >
+        <div className="container">
+          <div className="row d-flex justify-content-center">
+            {showItems(recipes)}
+          </div>
+        </div>
+      </InfiniteScroll>
     </div>
   );
 }

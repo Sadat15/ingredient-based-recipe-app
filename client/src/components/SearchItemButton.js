@@ -3,9 +3,14 @@ import React from "react";
 function SearchItemButton(props) {
   return (
     <button
-      className="search-item-button add-button btn btn-primary m-2"
+      className="add-button btn btn-primary"
       id={`search-button-${props.item}`}
-      style={{ backgroundColor: "#3fc5a7", borderColor: "#3fc5a7" }}
+      style={{
+        backgroundColor: "#3fc5a7",
+        borderColor: "#3fc5a7",
+        whiteSpace: "nowrap",
+        textAlign: "center",
+      }}
     >
       {props.item}
     </button>

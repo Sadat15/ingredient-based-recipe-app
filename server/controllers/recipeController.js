@@ -19,7 +19,6 @@ const RecipesController = {
         drinksList = drinksList.concat(response.data.drinks);
       }
     }
-    console.log(drinksList.length);
     const responseDrinksList = [
       ...drinksList
         .reduce((previousValue, currentValue) => {

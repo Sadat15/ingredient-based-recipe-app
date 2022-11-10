@@ -4,8 +4,10 @@ const axios = require("axios");
 
 const IngredientController = {
   FindByName: async (req, res) => {
-    const searchParams = req.params.strIngredient.toLowerCase()
-    const ingredient = await Ingredient.findOne({'strIngredient': searchParams });
+    const searchParams = req.params.strIngredient.toLowerCase();
+    const ingredient = await Ingredient.findOne({
+      strIngredient: searchParams,
+    });
     res.json(ingredient);
   },
   loadAllIngredients: async (req, res) => {
@@ -53,7 +55,6 @@ const IngredientController = {
   returnAllIngredients: async (req, res) => {
     const filter = {};
     const ingredients = await Ingredient.find(filter);
-    console.log(ingredients);
     res.json(ingredients);
   },
 };

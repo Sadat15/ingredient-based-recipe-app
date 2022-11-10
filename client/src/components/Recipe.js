@@ -20,6 +20,7 @@ function Recipe() {
         const drinkPriceResponse = await getIngredientFromDb(
           drink[`strIngredient${i}`]
         );
+        console.log(drinkPriceResponse.data);
         ingredientsArray.push([
           drink[`strIngredient${i}`],
           drink[`strMeasure${i}`],
@@ -41,6 +42,7 @@ function Recipe() {
     const response = await axios.get(
       `http://localhost:9000/ingredient/${item}`
     );
+    console.log(response);
     return response;
   };
 
