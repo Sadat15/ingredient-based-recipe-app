@@ -28,12 +28,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
-app.use("/recipes", recipesRouter);
-app.use("/users", usersRouter);
-app.use("/recipe", recipeRouter);
-app.use("/ingredient", ingredientRouter);
-app.use("/cocktail", cocktailRouter);
+app.use("/api/", indexRouter);
+app.use("/api/recipes", recipesRouter);
+app.use("/api/users", usersRouter);
+app.use("/api/recipe", recipeRouter);
+app.use("/api/ingredient", ingredientRouter);
+app.use("/api/cocktail", cocktailRouter);
 
 const mongoDbUrl = process.env.MONGODB_URL || "mongodb://0.0.0.0/recipe";
 const conn = mongoose.createConnection(mongoDbUrl);
@@ -53,5 +53,12 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
+
+if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
+  app.use(express.static('client/build'));
+  app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname + '/client/build/index.html'));
+  });
+ }
 
 module.exports = app;
