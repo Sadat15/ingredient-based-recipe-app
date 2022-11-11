@@ -45,8 +45,7 @@ function Recipe() {
     <div className="background-gradient-grey">
       <div className="container">
         <div className="row pt-4">
-          <div className="col"></div>
-          <div className="col-11">
+          <div className="col-12">
             <div className="card mb-3 shadow-lg p-3 mb-5 bg-white rounded" >
               <div className="row">
                 <div className="col-md-4">
@@ -86,7 +85,6 @@ function Recipe() {
               </div>
             </div>
           </div>
-          <div className="col"></div>
         </div>
       </div>
     </div>

@@ -24,21 +24,22 @@ function SearchBar() {
     };
     loadAllIngredients();
 
-    const el = document.getElementById("search-box");
+    const el = document.getElementById('search-box');
 
-    el.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        const typedSearchWord = document.querySelector(".input-field").value;
+    el.addEventListener('keydown', e => {
+      if(e.key === 'Enter'){
+        
+        const typedSearchWord = document.querySelector(".input-field").value
 
         if (!search.includes(typedSearchWord) && typedSearchWord.length > 0) {
-
           const updatedSearch = search.push(typedSearchWord);
           setSearch(updatedSearch);
-        }
-        getRecipes();
-        document.querySelector(".input-field").value = "";
+        } 
+        getRecipes()
+        document.querySelector(".input-field").value = ''
       }
-    });
+    })
+
   }, []);
 
   const getRecipes = async () => {
