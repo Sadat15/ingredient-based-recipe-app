@@ -8,7 +8,7 @@ function Recipe() {
 
   const getRecipe = async () => {
     const id = window.location.href.split("/").reverse()[0];
-    const response = await axios.get(`http://localhost:9000/recipe/${id}`);
+    const response = await axios.get(`http://localhost:9000/api/recipe/${id}`);
     const drink = response.data.drinks[0];
     setRecipe(drink);
 
@@ -36,7 +36,7 @@ function Recipe() {
 
   const getIngredientFromDb = async (item) => {
     const response = await axios.get(
-      `http://localhost:9000/ingredient/${item}`
+      `http://localhost:9000/api/ingredient/${item}`
     );
     return response;
   };

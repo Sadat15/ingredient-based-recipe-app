@@ -42,5 +42,6 @@
   },
   "devDependencies": {
     "jest-mock-axios": "^4.7.0-beta"
-  }
+  },
+  "proxy": "http://localhost:9000"
 }

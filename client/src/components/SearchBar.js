@@ -18,7 +18,7 @@ function SearchBar() {
   useEffect(() => {
     const loadAllIngredients = async () => {
       const response = await axios.get(
-        `http://localhost:9000/ingredient/returnAllIngredients`
+        `http://localhost:9000/api/ingredient/returnAllIngredients`
       );
       setIngredients(response.data);
     };
@@ -46,7 +46,7 @@ function SearchBar() {
     if (search.length > 0) {
       const parameters = search.map((word) => word.replace(" ", "_"));
       const response = await axios.get(
-        `http://localhost:9000/cocktail/getall/${parameters}`
+        `http://localhost:9000/api/cocktail/getall/${parameters}`
       );
       if (response.data !== null) {
         updateIngredients(response.data)
@@ -70,7 +70,7 @@ function SearchBar() {
 
       const parameter = searchWord.replace(" ", "_");
       const response = await axios.get(
-        `http://localhost:9000/cocktail/getall/${parameter}`
+        `http://localhost:9000/api/cocktail/getall/${parameter}`
       );
       updateIngredients(response.data)
 

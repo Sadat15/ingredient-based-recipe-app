@@ -38,7 +38,7 @@ function Recipe() {
 
   const getIngredientFromDb = async (item) => {
     const response = await axios.get(
-      `http://localhost:9000/ingredient/${item}`
+      `http://localhost:9000/api/ingredient/${item}`
     );
     return response;
   };
